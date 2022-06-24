@@ -1,8 +1,8 @@
 {
-  "name": "nest-typescript-starter",
+  "name": "deck-service",
   "private": true,
   "version": "1.0.0",
-  "description": "Nest TypeScript starter repository",
+  "description": "",
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",

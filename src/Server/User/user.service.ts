@@ -10,15 +10,11 @@ import {
   UserDoesNotExistException,
   UserExistsException,
 } from '../../Common/Errors';
-import { IMessage } from '../Room/Types/message';
-import { ChatService } from '../Chat/chat.service';
-import { BlockUserDto } from './Validation/block-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userRepository: Model<UserDocument>,
-    private chatService: ChatService,
   ) {}
 
   public async create(user: CreateUserDto): Promise<IUser> {
@@ -44,30 +40,5 @@ export class UserService {
     const user: IUser = await this.userRepository.findById({ _id }).lean();
     if (!user) throw new UserDoesNotExistException();
     return user;
-  }
-
-  public async getUserMessages(_id: string): Promise<IMessage[]> {
-    return this.chatService.getUserMessages(_id);
-  }
-
-  public async blockUser({ username, userId }: BlockUserDto): Promise<void> {
-    try {
-      const { _id: blockedUserId } = await this.getUserByUsername(username);
-      await this.userRepository.updateOne(
-        { _id: userId },
-        { $addToSet: { blockedUsers: [blockedUserId] } },
-      );
-      return;
-    } catch (e) {
-      throw new UserDoesNotExistException();
-    }
-  }
-
-  public async updateUserRoom(_id: string, roomId: string) {
-    try {
-      await this.userRepository.updateOne({ _id }, { room: roomId });
-    } catch (e) {
-      throw new UserDoesNotExistException();
-    }
   }
 }

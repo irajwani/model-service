@@ -31,9 +31,9 @@ async function bootstrap() {
   const appConfig = app.get(ConfigService).get('app');
   if (appConfig.swaggerEnabled) {
     const config = new DocumentBuilder()
-      .setTitle('Message Service')
+      .setTitle('Deck Service')
       .setDescription(
-        'Generic message service to provide resources for chat application',
+        'Generic card service to provide resources for card games',
       )
       .setVersion('0.0.1')
       .addBearerAuth()
