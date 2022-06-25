@@ -25,36 +25,16 @@ const ERRORS = {
     error: 'USER_EXISTS_ERROR',
     message: 'User with this username already exists',
   },
-  MISSING_TOKEN_HEADER: {
+  DECK_NOT_FOUND: {
     code: 5,
-    error: 'MISSING_TOKEN_HEADER_ERROR',
-    message:
-      "This endpoint is a protected resource. Please specify a 'token' in headers",
+    error: 'DECK_NOT_FOUND',
+    message: 'Deck does not exist. Please provide a valid Deck ID.',
   },
-  ROOM_NOT_FOUND: {
+  INVALID_DRAW: {
     code: 6,
-    error: 'ROOM_NOT_FOUND_ERROR',
-    message: 'Chat Room with that ID does not exist.',
-  },
-  ROOM_MEMBER_EXISTS: {
-    code: 7,
-    error: 'ROOM_MEMBER_EXISTS_ERROR',
-    message: 'User is already part of this chat room',
-  },
-  NOT_ROOM_MEMBER: {
-    code: 8,
-    error: 'NOT_ROOM_MEMBER_ERROR',
-    message: 'User is not a part of this chat room',
-  },
-  BLOCKED_USER: {
-    code: 9,
-    error: 'BLOCKED_USER_ERROR',
-    message: 'This user has blocked you. You can not send them a message.',
-  },
-  NO_MESSAGES: {
-    code: 10,
-    error: 'NO_MESSAGES_ERROR',
-    message: 'This user has not sent any messages to any chat room.',
+    error: 'INVALID_DRAW',
+    message:
+      'Attempting to draw more cards than amount left in deck. Please lower your draw count.',
   },
 };
 

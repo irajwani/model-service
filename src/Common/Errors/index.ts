@@ -19,12 +19,6 @@ export class InsufficientPermissionException extends HttpException {
   }
 }
 
-export class MissingTokenHeaderException extends HttpException {
-  constructor() {
-    super(ERRORS.MISSING_TOKEN_HEADER, HttpStatus.UNAUTHORIZED);
-  }
-}
-
 export class UserDoesNotExistException extends HttpException {
   constructor() {
     super(ERRORS.USER_DOES_NOT_EXIST, HttpStatus.NOT_FOUND);
@@ -37,33 +31,15 @@ export class UserExistsException extends HttpException {
   }
 }
 
-export class RoomNotFoundException extends HttpException {
+export class DeckNotFoundException extends HttpException {
   constructor() {
-    super(ERRORS.ROOM_NOT_FOUND, HttpStatus.NOT_FOUND);
+    super(ERRORS.DECK_NOT_FOUND, HttpStatus.NOT_FOUND);
   }
 }
 
-export class RoomMemberExistsException extends HttpException {
+export class InvalidDrawException extends HttpException {
   constructor() {
-    super(ERRORS.ROOM_MEMBER_EXISTS, HttpStatus.BAD_REQUEST);
-  }
-}
-
-export class UserNotRoomMemberException extends HttpException {
-  constructor() {
-    super(ERRORS.NOT_ROOM_MEMBER, HttpStatus.BAD_REQUEST);
-  }
-}
-
-export class BlockedUserException extends HttpException {
-  constructor() {
-    super(ERRORS.BLOCKED_USER, HttpStatus.BAD_REQUEST);
-  }
-}
-
-export class NoMessagesException extends HttpException {
-  constructor() {
-    super(ERRORS.NO_MESSAGES, HttpStatus.NOT_FOUND);
+    super(ERRORS.INVALID_DRAW, HttpStatus.BAD_REQUEST);
   }
 }
 

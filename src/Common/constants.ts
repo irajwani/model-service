@@ -1,3 +1,4 @@
 export default {
-  ROOM_MESSAGES_LIMIT: 50,
+  SHORT_DECK_START: 7,
+  FULL_DECK_START: 2,
 };

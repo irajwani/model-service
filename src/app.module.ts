@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import ConfigurationModule from './Configurations/Config/config.module';
 import DatabaseModule from './Configurations/Database/DatabaseModule';
 import { HealthModule } from './Server/Health/health.module';
-import { AuthModule, UserModule } from './Server';
+import { AuthModule, DeckModule, UserModule } from './Server';
 import LoggerMiddleware from './Common/Middleware/logger.middleware';
 
 @Module({
@@ -12,6 +12,7 @@ import LoggerMiddleware from './Common/Middleware/logger.middleware';
     HealthModule,
     AuthModule,
     UserModule,
+    DeckModule,
   ],
 })
 export class AppModule implements NestModule {
