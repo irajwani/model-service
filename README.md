@@ -1,6 +1,6 @@
 ## Description
 
-Generic TS based deck-service to deal and manage french playing cards
+Model-Service to create and manage meta-models
 
 ## Installation
 
@@ -12,32 +12,24 @@ $ npm install
 ## Running the app
 
 ```bash
-$ docker build -t deck-service .
+$ docker build -t model-service .
 $ docker-compose up
 ```
 
-Then proceed to usage section
-
-Alternatively, if you would like to run the app locally, and node_modules fail to install, it might be a node version issue (I used node 12.18.1)
-In this case, install nvm with:
+Or 
 
 ```bash
-$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+$ docker pull irajwani/model-service
 ```
 
-Then follow the instructions provided to make 'nvm' command available within your terminal
-Then,
+Or
 
 ```bash
-$ nvm install 12.18.1
-$ nvm use 12.18.1
-$ npm i
 $ npm run dev
+$ npm run test
 ```
 
-and run a mongo container within docker
-
-Important: Use an IDE like webstorm to set up a run configuration and provide an ENV value for ACCESS_TOKEN_SECRET_KEY
+and run a mongo container within docker on port 27017
 
 ## Usage
 
@@ -46,5 +38,9 @@ Simply visit the [swagger documentation](http://localhost:3000/documentation) to
 You can connect to the mongodb instance within a GUI for mongo with connection string 'mongodb://localhost:27017'
 
 ## Standard User Story:
+
+- Create a model
+- Retrieve the model by ID
+- Patch a model, and play around with deltas mechanism, like in assignment description
 
 I've added comments within the code base for any other shortcomings in the system design that would be detrimental in a production grade repo.

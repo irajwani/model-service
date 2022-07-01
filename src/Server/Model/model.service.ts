@@ -31,7 +31,7 @@ export class ModelService {
     const entitiesInAssociations = _.flatten(
       _.map(associations, (a: IAssociation) => [a.source, a.target]),
     );
-    if (_.difference(entityNames, entitiesInAssociations))
+    if (_.difference(entityNames, entitiesInAssociations).length > 0)
       throw new InvalidAssociationException();
     try {
       const { _id } = await this.modelRepository.create(createModelDto);
