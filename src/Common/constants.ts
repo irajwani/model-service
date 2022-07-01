@@ -1,4 +1,4 @@
 export default {
-  SHORT_DECK_START: 7,
-  FULL_DECK_START: 2,
+  MODEL_NAME_MIN_LENGTH: 1,
+  MODEL_NAME_MAX_LENGTH: 40,
 };

@@ -7,39 +7,69 @@ export class InternalServerException extends HttpException {
   }
 }
 
-export class InvalidCredentialsException extends HttpException {
+export class ModelExistsException extends HttpException {
   constructor() {
-    super(ERRORS.INVALID_CREDENTIALS, HttpStatus.BAD_REQUEST);
+    super(ERRORS.MODEL_EXISTS, HttpStatus.BAD_REQUEST);
   }
 }
 
-export class InsufficientPermissionException extends HttpException {
+export class ModelNotFoundException extends HttpException {
   constructor() {
-    super(ERRORS.INSUFFICIENT_PERMISSION, HttpStatus.FORBIDDEN);
+    super(ERRORS.MODEL_NOT_FOUND, HttpStatus.BAD_REQUEST);
   }
 }
 
-export class UserDoesNotExistException extends HttpException {
+export class InvalidPathException extends HttpException {
   constructor() {
-    super(ERRORS.USER_DOES_NOT_EXIST, HttpStatus.NOT_FOUND);
+    super(ERRORS.INVALID_PATH, HttpStatus.BAD_REQUEST);
   }
 }
 
-export class UserExistsException extends HttpException {
+export class InvalidEntityException extends HttpException {
   constructor() {
-    super(ERRORS.USER_EXISTS, HttpStatus.BAD_REQUEST);
+    super(ERRORS.INVALID_ENTITY, HttpStatus.BAD_REQUEST);
   }
 }
 
-export class DeckNotFoundException extends HttpException {
+export class InvalidAttributeException extends HttpException {
   constructor() {
-    super(ERRORS.DECK_NOT_FOUND, HttpStatus.NOT_FOUND);
+    super(ERRORS.INVALID_ATTRIBUTE, HttpStatus.BAD_REQUEST);
   }
 }
 
-export class InvalidDrawException extends HttpException {
+export class InvalidAssociationException extends HttpException {
   constructor() {
-    super(ERRORS.INVALID_DRAW, HttpStatus.BAD_REQUEST);
+    super(ERRORS.INVALID_ASSOCIATION, HttpStatus.BAD_REQUEST);
+  }
+}
+
+export class EntityExistsException extends HttpException {
+  constructor() {
+    super(ERRORS.ENTITY_EXISTS, HttpStatus.BAD_REQUEST);
+  }
+}
+
+export class AttributeExistsException extends HttpException {
+  constructor() {
+    super(ERRORS.ATTRIBUTE_EXISTS, HttpStatus.BAD_REQUEST);
+  }
+}
+
+export class AssociationExistsException extends HttpException {
+  constructor() {
+    super(ERRORS.ASSOCIATION_EXISTS, HttpStatus.BAD_REQUEST);
+  }
+}
+
+export class OperationPathMismatchException extends HttpException {
+  constructor() {
+    super(ERRORS.OPERATION_PATH_MISMATCH, HttpStatus.BAD_REQUEST);
+  }
+}
+
+export class CannotDeleteAllEntitiesException extends HttpException {
+  constructor() {
+    super(ERRORS.CANNOT_DELETE_ALL_ENTITIES, HttpStatus.BAD_REQUEST);
   }
 }
 

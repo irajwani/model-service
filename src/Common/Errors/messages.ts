@@ -4,37 +4,68 @@ const ERRORS = {
     error: 'INTERNAL_SERVER_ERROR',
     message: 'Internal Server Error',
   },
-  INVALID_CREDENTIALS: {
+  MODEL_EXISTS: {
     code: 1,
-    error: 'INVALID_CREDENTIALS_ERROR',
-    message: 'Incorrect email/password',
+    error: 'MODEL_EXISTS_ERROR',
+    message: 'Model Exists Error',
   },
-  INSUFFICIENT_PERMISSION: {
+  MODEL_NOT_FOUND: {
     code: 2,
-    error: 'INSUFFICIENT_PERMISSION_ERROR',
-    message:
-      'You are not authorized. Please use a valid set of credentials or a valid jwt.',
+    error: 'MODEL_NOT_FOUND_ERROR',
+    message: 'Model Not Found Error',
   },
-  USER_DOES_NOT_EXIST: {
+  INVALID_PATH: {
     code: 3,
-    error: 'USER_DOES_NOT_EXIST',
-    message: 'No user with that username and password combination exists.',
-  },
-  USER_EXISTS: {
-    code: 4,
-    error: 'USER_EXISTS_ERROR',
-    message: 'User with this username already exists',
-  },
-  DECK_NOT_FOUND: {
-    code: 5,
-    error: 'DECK_NOT_FOUND',
-    message: 'Deck does not exist. Please provide a valid Deck ID.',
-  },
-  INVALID_DRAW: {
-    code: 6,
-    error: 'INVALID_DRAW',
+    error: 'INVALID_PATH_ERROR',
     message:
-      'Attempting to draw more cards than amount left in deck. Please lower your draw count.',
+      'Invalid Path Error. Path must contain names of elements part of meta model.',
+  },
+  INVALID_ENTITY: {
+    code: 4,
+    error: 'INVALID_ENTITY_ERROR',
+    message:
+      'Invalid Entity Error. Provided entity does not comply with the required structure.',
+  },
+  INVALID_ATTRIBUTE: {
+    code: 5,
+    error: 'INVALID_ATTRIBUTE_ERROR',
+    message:
+      'Invalid Attribute Error. Provided attribute does not comply with the required structure.',
+  },
+  INVALID_ASSOCIATION: {
+    code: 6,
+    error: 'INVALID_ASSOCIATION_ERROR',
+    message:
+      'Invalid Association Error. Provided association does not comply with the required structure.',
+  },
+  ENTITY_EXISTS: {
+    code: 7,
+    error: 'ENTITY_EXISTS_ERROR',
+    message:
+      'Entity Exists Error. The entity you are trying to add to this model already exists.',
+  },
+  ATTRIBUTE_EXISTS: {
+    code: 8,
+    error: 'ATTRIBUTE_EXISTS_ERROR',
+    message:
+      'Attribute Exists Error. The attribute you are trying to add already exists within this entity.',
+  },
+  ASSOCIATION_EXISTS: {
+    code: 9,
+    error: 'ASSOCIATION_EXISTS_ERROR',
+    message:
+      'Association Exists Error. The association you are trying to add already exists within this model.',
+  },
+  OPERATION_PATH_MISMATCH: {
+    code: 10,
+    error: 'OPERATION_PATH_MISMATCH_ERROR',
+    message:
+      'The operation selected cannot be performed on this path/resource.',
+  },
+  CANNOT_DELETE_ALL_ENTITIES: {
+    code: 11,
+    error: 'CANNOT_DELETE_ALL_ENTITIES_ERROR',
+    message: 'You are attempting to delete all entities.',
   },
 };
 

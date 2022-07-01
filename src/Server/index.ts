@@ -1,5 +1,3 @@
-import { AuthModule } from './Auth/auth.module';
-import { UserModule } from './User/user.module';
-import { DeckModule } from './Deck/deck.module';
+import { ModelModule } from './Model/model.module';
 
-export { AuthModule, UserModule, DeckModule };
+export { ModelModule };

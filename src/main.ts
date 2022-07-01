@@ -13,11 +13,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
   app.enableShutdownHooks();
-  app.enableCors({
-    origin: '*',
-    methods: 'GET, PUT, POST, PATCH, DELETE',
-    allowedHeaders: 'Content-Type, Authorization',
-  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -31,13 +26,11 @@ async function bootstrap() {
   const appConfig = app.get(ConfigService).get('app');
   if (appConfig.swaggerEnabled) {
     const config = new DocumentBuilder()
-      .setTitle('Deck Service')
-      .setDescription(
-        'Generic card service to provide resources for card games',
-      )
+      .setTitle('Model Service')
+      .setDescription('Client library for Model service')
       .setVersion('0.0.1')
-      .addBearerAuth()
       .build();
+
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('documentation', app, document);
   }

@@ -1,16 +1,15 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
-import { NextFunction, Response } from 'express';
-import { RequestWithUser } from '../Types/request-with-user';
-import { LogTypes } from '../../Server/Log/Types/log';
-import { LogService } from '../../Server/Log/log.service';
-import { CreateLogDto } from '../../Server/Log/Validation/create-log.dto';
+import { NextFunction, Request, Response } from 'express';
+// import { LogTypes } from '../../Server/Log/Types/log';
+// import { LogService } from '../../Server/Log/log.service';
+// import { CreateLogDto } from '../../Server/Log/Validation/create-log.Validation';
 
 @Injectable()
 class LoggerMiddleware implements NestMiddleware {
-  constructor(private readonly logService: LogService) {}
+  // constructor(private readonly logService: LogService) {}
   private readonly logger = new Logger('Custom HTTP Logger');
 
-  use(request: RequestWithUser, response: Response, next: NextFunction) {
+  use(request: Request, response: Response, next: NextFunction) {
     response.on('finish', async () => {
       const { method, originalUrl } = request;
       const userAgent = request.get('user-agent');
@@ -18,34 +17,15 @@ class LoggerMiddleware implements NestMiddleware {
 
       const message = `${method} ${originalUrl} ${statusCode} ${statusMessage} from client: ${userAgent}`;
 
-      // If there is no req.user, should ideally use user ID for custom unknown user which exists in db.users
-      const log: CreateLogDto = {
-        user: request.user ? request.user._id : 'unauthorized user',
-        text: this.logService.generateTextBasedOnServerResponse(
-          originalUrl,
-          statusCode,
-        ),
-        action: `${method} ${originalUrl}`,
-        type: LogTypes.SUCCESS,
-      };
-
       if (statusCode >= 500) {
-        log.type = LogTypes.ERROR;
-        this.logger.error(message);
-        await this.logService.createLog(log);
-        return;
+        return this.logger.error(message);
       }
 
       if (statusCode >= 400) {
-        log.type = LogTypes.WARNING;
-        this.logger.warn(message);
-        await this.logService.createLog(log);
-        return;
+        return this.logger.warn(message);
       }
 
-      this.logger.log(message);
-      await this.logService.createLog(log);
-      return;
+      return this.logger.log(message);
     });
 
     next();
