@@ -1,9 +1,25 @@
 import { IPatch } from '../Types/patch';
-import { ArrayUnique, IsArray, IsDefined } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsDefined,
+  IsNotEmpty,
+  ValidateNested,
+} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import DeltasExample from './Examples/deltas';
 
 export class UpdateModelDto {
   @IsDefined()
   @IsArray()
-  @ArrayUnique()
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @IsNotEmpty({ each: true })
+  @ApiProperty({
+    name: 'deltas',
+    description: 'Enter deltas as an array of operations',
+    type: [IPatch],
+    example: DeltasExample,
+  })
   deltas: IPatch[];
 }

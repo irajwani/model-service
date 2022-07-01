@@ -14,6 +14,4 @@ export interface IBaseGenerator {
 
   generatePathComponents(): string[];
   generateField(): string;
-  // validate(): void;
-  // generate(): IUpdateOperation;
 }

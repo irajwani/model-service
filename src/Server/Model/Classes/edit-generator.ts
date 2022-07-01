@@ -1,10 +1,6 @@
-// path check
-// edit entities should edit associations and vice versa
 import * as _ from 'lodash';
 import { IModel } from '../../../Schemas/model.schema';
 import {
-  CannotDeleteAllAttributesException,
-  CannotDeleteAllEntitiesException,
   InvalidAssociationException,
   InvalidPathException,
   OperationPathMismatchException,
@@ -19,10 +15,11 @@ import { IAssociation } from '../Types/association';
 export default class EditQueryGenerator extends BaseGenerator {
   update: UpdateQuery<IModel>[] = [];
 
-  constructor({ path, model }) {
+  constructor({ path, value, model }) {
     super();
     this.type = '$set';
     this.path = path;
+    this.value = value;
     this.pathComponents = this.generatePathComponents();
     this.model = model;
     this.field = this.generateField();

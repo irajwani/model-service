@@ -4,7 +4,10 @@ import {
   Model,
   UpdateQuery,
   UpdateWriteOpResult,
+  MongooseBulkWriteOptions,
 } from 'mongoose';
+
+import { BulkWriteResult, BulkWriteOptions } from 'mongodb';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
@@ -52,6 +55,13 @@ export abstract class EntityRepository<T extends Document> {
     updateEntityData: UpdateQuery<unknown>,
   ): Promise<UpdateWriteOpResult | null> {
     return this.entityModel.updateOne(entityFilterQuery, updateEntityData);
+  }
+
+  async bulkWrite(
+    operations,
+    options: MongooseBulkWriteOptions | BulkWriteOptions,
+  ): Promise<BulkWriteResult | null> {
+    return this.entityModel.bulkWrite(operations, options);
   }
 
   async deleteMany(entityFilterQuery: FilterQuery<T>): Promise<boolean> {

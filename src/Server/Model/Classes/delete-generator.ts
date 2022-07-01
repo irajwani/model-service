@@ -17,6 +17,7 @@ export default class DeleteQueryGenerator extends BaseGenerator {
     super();
     this.type = '$unset';
     this.path = path;
+    this.value = '';
     this.pathComponents = this.generatePathComponents();
     this.model = model;
     this.field = this.generateField();
@@ -25,11 +26,12 @@ export default class DeleteQueryGenerator extends BaseGenerator {
 
   generate() {
     const [property, index, subProperty, subIndex] = this.pathComponents;
-    if (this.path === 'name') throw new OperationPathMismatchException();
-    else if (this.path === 'entities')
+    if (this.path === ValidResources.name)
+      throw new OperationPathMismatchException();
+    else if (this.path === ValidResources.entities)
       throw new CannotDeleteAllEntitiesException();
-    else if (this.path === 'associations') {
-      this.update.push({ [this.type]: { [this.field]: '' } });
+    else if (this.path === ValidResources.associations) {
+      this.update.push({ [this.type]: { [this.field]: this.value } });
     } else if (
       property === ValidResources.entities &&
       isInteger(index) &&
@@ -42,7 +44,7 @@ export default class DeleteQueryGenerator extends BaseGenerator {
       if (!this.model.entities[index]) throw new InvalidPathException();
 
       const entityName = this.model.entities[index].name;
-      this.update.push({ [this.type]: { [this.field]: '' } });
+      this.update.push({ $pull: { [property]: { name: entityName } } });
       this.update.push({
         $pull: {
           [ValidResources.associations]: {
@@ -65,15 +67,24 @@ export default class DeleteQueryGenerator extends BaseGenerator {
       isInteger(subIndex)
     ) {
       // entities/n/attributes/k
-      if (this.model.entities[index].attributes.length === 1)
+      const attributes = this.model.entities[index].attributes;
+      if (attributes.length === 1)
         throw new CannotDeleteAllAttributesException();
-      if (!this.model.entities[index].attributes[subIndex])
-        throw new InvalidPathException();
-      this.update.push({ [this.type]: { [this.field]: '' } });
+      if (!attributes[subIndex]) throw new InvalidPathException();
+      this.update.push({
+        $pull: {
+          [`${property}.${index}.${subProperty}`]: {
+            name: attributes[subIndex].name,
+          },
+        },
+      });
     } else if (property === ValidResources.associations && isInteger(index)) {
       //  associations/n
-      if (!this.model.associations[index]) throw new InvalidPathException();
-      this.update.push({ [this.type]: { [this.field]: '' } });
+      const association = this.model.associations[index];
+      if (!association) throw new InvalidPathException();
+      this.update.push({
+        $pull: { [property]: { name: association.name } },
+      });
     } else {
       throw new InvalidPathException();
     }

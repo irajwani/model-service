@@ -8,8 +8,11 @@ import {
   ValidateNested,
   MinLength,
   MaxLength,
+  Validate,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+  ValidationArguments,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import Constants from '../../../Common/constants';
 import { IEntity } from '../Types/entity';
@@ -17,6 +20,22 @@ import { IAssociation } from '../Types/association';
 const { MODEL_NAME_MAX_LENGTH, MODEL_NAME_MIN_LENGTH } = Constants;
 import EntitiesExample from './Examples/entity';
 import AssociationsExample from './Examples/association';
+
+@ValidatorConstraint()
+export class IsValidAssociation implements ValidatorConstraintInterface {
+  public async validate(
+    associations: IAssociation[],
+    args: ValidationArguments,
+  ) {
+    if (
+      associations.find(
+        (association) => association.source === association.target,
+      )
+    )
+      return false;
+    return true;
+  }
+}
 
 export class CreateModelDto {
   @ApiProperty({
@@ -30,7 +49,6 @@ export class CreateModelDto {
   @IsString()
   @MinLength(MODEL_NAME_MIN_LENGTH)
   @MaxLength(MODEL_NAME_MAX_LENGTH)
-  // @Matches() todo: regexp check
   name: string;
 
   @ApiProperty({
@@ -59,6 +77,12 @@ export class CreateModelDto {
   @ArrayUnique(
     (association: IAssociation) => association.source && association.target,
   )
+  @Validate(IsValidAssociation, {
+    message: 'Association must have distinct source and target values',
+  })
   associations: IAssociation[];
-  //  source != target
+}
+
+export interface ICreateModelResponse {
+  _id: string;
 }

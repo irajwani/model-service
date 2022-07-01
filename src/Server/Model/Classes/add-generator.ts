@@ -7,7 +7,6 @@ import {
   AttributeExistsException,
   EntityExistsException,
   InvalidAssociationException,
-  InvalidAttributeException,
   InvalidPathException,
   OperationPathMismatchException,
 } from '../../../Common/Errors';
@@ -16,6 +15,7 @@ import { TValue } from './Types/value';
 import { IAssociation } from '../Types/association';
 import { IAttribute } from '../Types/attribute';
 import { UpdateQuery } from 'mongoose';
+import { ValidResources } from './Types/valid-resources';
 
 export default class AddQueryGenerator extends BaseGenerator {
   op: Operations;
@@ -87,10 +87,11 @@ export default class AddQueryGenerator extends BaseGenerator {
   }
 
   generate() {
-    if (this.path === 'name') throw new OperationPathMismatchException();
-    if (this.path === 'entities') {
+    if (this.path === ValidResources.name)
+      throw new OperationPathMismatchException();
+    if (this.path === ValidResources.entities) {
       this.validateEntity();
-    } else if (this.path === 'associations') {
+    } else if (this.path === ValidResources.associations) {
       this.validateAssociation();
     } else {
       this.validateAttribute();
