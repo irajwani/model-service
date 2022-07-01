@@ -67,6 +67,12 @@ const ERRORS = {
     error: 'CANNOT_DELETE_ALL_ENTITIES_ERROR',
     message: 'You are attempting to delete all entities.',
   },
+  CANNOT_DELETE_ALL_ATTRIBUTES: {
+    code: 12,
+    error: 'CANNOT_DELETE_ALL_ATTRIBUTES_ERROR',
+    message:
+      'You are attempting to delete all attributes of a specific entity.',
+  },
 };
 
 export { ERRORS };

@@ -12,6 +12,7 @@ export interface IBaseGenerator {
   field: string;
   update: UpdateQuery<IModel>;
 
+  generatePathComponents(): string[];
   generateField(): string;
   // validate(): void;
   // generate(): IUpdateOperation;

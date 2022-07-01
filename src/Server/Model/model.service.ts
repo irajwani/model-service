@@ -44,7 +44,7 @@ export class ModelService {
       _.forEach(deltas, function ({ op, path, value }: IPatch) {
         const QueryGenerator = QueryGenerators[op];
         const { update } = new QueryGenerator({ op, path, value, model });
-        updateSequence.push(update);
+        updateSequence.push(...update);
       });
 
       // todo: organize queries to reduce constant calls to DB

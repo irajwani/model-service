@@ -73,6 +73,12 @@ export class CannotDeleteAllEntitiesException extends HttpException {
   }
 }
 
+export class CannotDeleteAllAttributesException extends HttpException {
+  constructor() {
+    super(ERRORS.CANNOT_DELETE_ALL_ATTRIBUTES, HttpStatus.BAD_REQUEST);
+  }
+}
+
 export enum MongooseErrorCodes {
   UniquePropViolation = '11000',
 }

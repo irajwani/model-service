@@ -22,7 +22,7 @@ export default class AddQueryGenerator extends BaseGenerator {
   path: string;
   value: TValue;
   model: IModel;
-  update: UpdateQuery<IModel>;
+  update: UpdateQuery<IModel>[] = [];
 
   constructor({ op, path, value, model }) {
     super();
@@ -32,7 +32,7 @@ export default class AddQueryGenerator extends BaseGenerator {
     this.value = value;
     this.model = model;
     this.field = this.generateField();
-    this.update = this.generate();
+    this.generate();
   }
 
   validateEntity() {
@@ -44,7 +44,6 @@ export default class AddQueryGenerator extends BaseGenerator {
       this.model.entities.find((e) => e.name === entity.name)
     )
       throw new EntityExistsException();
-    return;
   }
 
   validateAssociation() {
@@ -64,7 +63,6 @@ export default class AddQueryGenerator extends BaseGenerator {
       source === target
     )
       throw new InvalidAssociationException();
-    return;
   }
 
   validateAttribute() {
@@ -86,10 +84,9 @@ export default class AddQueryGenerator extends BaseGenerator {
       )
     )
       throw new AttributeExistsException();
-    return;
   }
 
-  validate() {
+  generate() {
     if (this.path === 'name') throw new OperationPathMismatchException();
     if (this.path === 'entities') {
       this.validateEntity();
@@ -98,12 +95,8 @@ export default class AddQueryGenerator extends BaseGenerator {
     } else {
       this.validateAttribute();
     }
-  }
-
-  generate(): UpdateQuery<IModel> {
-    this.validate();
-    return {
+    this.update.push({
       [this.type]: { [this.field]: this.value },
-    };
+    });
   }
 }

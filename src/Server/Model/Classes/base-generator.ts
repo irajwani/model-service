@@ -15,6 +15,8 @@ export default abstract class BaseGenerator implements IBaseGenerator {
   @IsDefined()
   path: string;
 
+  pathComponents: string[];
+
   @IsDefined()
   value: TValue;
 
@@ -26,6 +28,10 @@ export default abstract class BaseGenerator implements IBaseGenerator {
   field: string;
 
   update: UpdateQuery<IModel>;
+
+  generatePathComponents(): string[] {
+    return _.split(this.path, '/');
+  }
 
   generateField(): string {
     // const pathComponents = _.split(this.path, '/');
@@ -40,6 +46,6 @@ export default abstract class BaseGenerator implements IBaseGenerator {
     //   return piece;
     // });
 
-    return _.join(_.split(this.path, '/'), '.');
+    return _.join(this.generatePathComponents(), '.');
   }
 }

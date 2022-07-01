@@ -4,3 +4,10 @@ export enum ValidResources {
   attributes = 'attributes',
   associations = 'associations',
 }
+
+export enum ValidProperties {
+  name = 'name',
+  type = 'type',
+  source = 'source',
+  target = 'target',
+}
