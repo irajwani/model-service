@@ -18,8 +18,8 @@ import Constants from '../../../Common/constants';
 import { IEntity } from '../Types/entity';
 import { IAssociation } from '../Types/association';
 const { MODEL_NAME_MAX_LENGTH, MODEL_NAME_MIN_LENGTH } = Constants;
-import EntitiesExample from './Examples/entity';
-import AssociationsExample from './Examples/association';
+import EntitiesExample from '../Test/Stubs/entity';
+import AssociationsExample from '../Test/Stubs/association';
 
 @ValidatorConstraint()
 export class IsValidAssociation implements ValidatorConstraintInterface {
@@ -55,7 +55,7 @@ export class CreateModelDto {
     name: 'entities',
     description: 'Entities within model',
     type: Array,
-    example: Object.values(EntitiesExample),
+    example: Object.values(EntitiesExample.S1T1),
   })
   @IsArray()
   @ArrayNotEmpty()
@@ -68,7 +68,7 @@ export class CreateModelDto {
     name: 'associations',
     description: 'Associations between entities of model',
     type: Array,
-    example: Object.values(AssociationsExample),
+    example: Object.values(AssociationsExample.S1T1),
   })
   @IsOptional()
   @IsArray()

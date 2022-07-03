@@ -1,4 +1,5 @@
 import { IsDefined, IsEnum, IsOptional, IsString } from 'class-validator';
+import { TValue } from '../Classes/Types/value';
 
 export enum Operations {
   ADD = 'add',
@@ -11,10 +12,11 @@ export class IPatch {
   @IsEnum(Operations)
   op: Operations;
 
+  // todo: add specific paths as enum
   @IsDefined()
   @IsString()
   path: string;
 
   @IsOptional()
-  value: any;
+  value?: TValue;
 }

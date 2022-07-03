@@ -79,6 +79,12 @@ export class CannotDeleteAllAttributesException extends HttpException {
   }
 }
 
+export class MongoCastToObjectIdFailedException extends HttpException {
+  constructor() {
+    super(ERRORS.CAST_TO_OBJECT_ID_FAILED, HttpStatus.BAD_REQUEST);
+  }
+}
+
 export enum MongooseErrorCodes {
   UniquePropViolation = '11000',
 }

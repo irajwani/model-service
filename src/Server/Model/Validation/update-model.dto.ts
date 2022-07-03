@@ -7,7 +7,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import DeltasExample from './Examples/deltas';
+import DeltasExample from '../Test/Stubs/deltas';
 
 export class UpdateModelDto {
   @IsDefined()
@@ -19,7 +19,7 @@ export class UpdateModelDto {
     name: 'deltas',
     description: 'Enter deltas as an array of operations',
     type: [IPatch],
-    example: DeltasExample,
+    example: DeltasExample.S1T1.deltas,
   })
   deltas: IPatch[];
 }

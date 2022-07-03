@@ -5,6 +5,7 @@ import { IBaseGenerator } from './Types/base-generator';
 import { IsDefined, IsEnum } from 'class-validator';
 import { TValue } from './Types/value';
 import { UpdateQuery } from 'mongoose';
+import { IStrategy } from './Types/strategy';
 
 export default abstract class BaseGenerator implements IBaseGenerator {
   @IsDefined()
@@ -28,11 +29,17 @@ export default abstract class BaseGenerator implements IBaseGenerator {
 
   update: UpdateQuery<IModel>;
 
-  generatePathComponents(): string[] {
+  protected constructor(private strategy: IStrategy) {}
+
+  public setStrategy(strategy: IStrategy) {
+    this.strategy = strategy;
+  }
+
+  public generatePathComponents(): string[] {
     return _.split(this.path, '/');
   }
 
-  generateField(): string {
+  public generateField(): string {
     return _.join(this.generatePathComponents(), '.');
   }
 }

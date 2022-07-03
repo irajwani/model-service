@@ -73,6 +73,8 @@ const ERRORS = {
     message:
       'You are attempting to delete all attributes of a specific entity.',
   },
+  CAST_TO_OBJECT_ID_FAILED:
+    'Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer',
 };
 
 export { ERRORS };
