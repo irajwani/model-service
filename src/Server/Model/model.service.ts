@@ -8,6 +8,7 @@ import { UpdateModelDto } from './Validation/update-model.dto';
 import {
   InternalServerException,
   InvalidAssociationException,
+  InvalidPathException,
   ModelExistsException,
   ModelNotFoundException,
   MongoCastToObjectIdFailedException,
@@ -22,6 +23,9 @@ import { IAssociation } from './Types/association';
 import { IEntity } from './Types/entity';
 import { BulkWriteResult } from 'mongodb';
 import { ERRORS } from '../../Common/Errors/messages';
+import BaseGenerator from './Classes/base-generator';
+import { IStrategy } from './Classes/Types/strategy';
+import ModelLogic from './model.logic';
 
 @Injectable()
 export class ModelService {
@@ -73,12 +77,7 @@ export class ModelService {
   ): Promise<BulkWriteResult> {
     try {
       const model = await this.findOne(_id);
-      const updateSequence = [];
-      _.forEach(deltas, function ({ op, path, value }: IPatch) {
-        const QueryGenerator = QueryGenerators[op];
-        const { update } = new QueryGenerator({ op, path, value, model });
-        updateSequence.push(...update);
-      });
+      const updateSequence = ModelLogic.generateUpdateSequence(deltas, model);
       const filter = { _id };
       const bulkUpdate = updateSequence.map((update: UpdateQuery<IModel>) => ({
         updateOne: {
