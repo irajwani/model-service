@@ -12,6 +12,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
   ValidationArguments,
+  IsDefined,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import Constants from '../../../Common/constants';
@@ -46,6 +47,7 @@ export class CreateModelDto {
     minLength: MODEL_NAME_MIN_LENGTH,
     maxLength: MODEL_NAME_MAX_LENGTH,
   })
+  @IsDefined()
   @IsString()
   @MinLength(MODEL_NAME_MIN_LENGTH)
   @MaxLength(MODEL_NAME_MAX_LENGTH)
@@ -57,6 +59,7 @@ export class CreateModelDto {
     type: Array,
     example: Object.values(EntitiesExample.S1T1),
   })
+  @IsDefined()
   @IsArray()
   @ArrayNotEmpty()
   @ValidateNested({ each: true })

@@ -26,6 +26,29 @@ const EntityStubs: IEntityStubs = {
       ],
     },
   },
+  S1T2: {
+    Person: {
+      name: 'Person',
+      attributes: [
+        { name: 'name', type: 'string' },
+        { name: 'hairColor', type: 'string' },
+      ],
+    },
+    Company: {
+      name: 'Company',
+      attributes: [
+        { name: 'name', type: 'string' },
+        { name: 'country', type: 'string' },
+      ],
+    },
+    Website: {
+      name: 'Website',
+      attributes: [
+        { name: 'name', type: 'string' },
+        { name: 'url', type: 'string' },
+      ],
+    },
+  },
   S3T1: {
     Librarian: {
       name: 'Librarian',
@@ -40,6 +63,15 @@ const EntityStubs: IEntityStubs = {
       attributes: [
         { name: 'location', type: 'string' },
         { name: 'books', type: 'number' },
+      ],
+    },
+  },
+  S3T2: {
+    Website: {
+      name: 'Website',
+      attributes: [
+        { name: 'main page', type: 'string' },
+        { name: 'url', type: 'string' },
       ],
     },
   },

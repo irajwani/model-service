@@ -15,10 +15,10 @@ import { DatabaseService } from '../../../Configurations/Database/database.servi
 
 import ModelStubs from './Stubs/model';
 import { ERRORS } from '../../../Common/Errors/messages';
-import { IModel } from '../../../Schemas/model.schema';
 import { CreateModelDto } from '../Validation/create-model.dto';
 import { UpdateModelDto } from '../Validation/update-model.dto';
 import DeltasStub from './Stubs/deltas';
+import EntityStubs from './Stubs/entity';
 
 jest.setTimeout(60000);
 
@@ -98,59 +98,53 @@ describe('Model Service - E2E', () => {
       expect(response.body).toEqual({ _id: String(model._id) });
     });
 
-    // it('should throw a validation error due to malformed prop "type" in request body', async () => {
-    //   const body = {
-    //     type: 'malformed',
-    //     isShuffled: decksStub.S1T1.isShuffled,
-    //   };
-    //
-    //   const expectedValidationError = [
-    //     {
-    //       target: {
-    //         type: 'malformed',
-    //         isShuffled: decksStub.S1T1.isShuffled,
-    //       },
-    //       value: 'malformed',
-    //       property: 'type',
-    //       children: [],
-    //       constraints: {
-    //         isEnum: 'type must be a valid enum value',
-    //       },
-    //     },
-    //   ];
-    //   const response = await request(httpServer).post('/deck').send(body);
-    //   expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-    //   expect(response.body.message).toEqual(expectedValidationError);
-    // });
-    //
-    // it('should throw a validation error due to malformed prop "isShuffled" in request body', async () => {
-    //   const body = {
-    //     type: decksStub.S1T1.type,
-    //     isShuffled: 'malformed',
-    //   };
-    //
-    //   const expectedValidationError = [
-    //     {
-    //       target: {
-    //         type: decksStub.S1T1.type,
-    //         isShuffled: 'malformed',
-    //       },
-    //       value: 'malformed',
-    //       property: 'isShuffled',
-    //       children: [],
-    //       constraints: {
-    //         isBoolean: 'isShuffled must be a boolean value',
-    //       },
-    //     },
-    //   ];
-    //   const response = await request(httpServer).post('/deck').send(body);
-    //   expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-    //   expect(response.body.message).toEqual(expectedValidationError);
-    // });
+    it('throws a validation error due to missing prop "name" in request body', async () => {
+      const body = {
+        entities: ModelStubs.S1T1.entities,
+        associations: ModelStubs.S1T1.associations,
+      };
+
+      const expectedValidationError = {
+        isDefined: 'name should not be null or undefined',
+        maxLength: 'name must be shorter than or equal to 40 characters',
+        minLength: 'name must be longer than or equal to 1 characters',
+        isString: 'name must be a string',
+      };
+      const response = await request(httpServer).post('/model').send(body);
+      expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(response.body.message[0].constraints).toEqual(
+        expectedValidationError,
+      );
+    });
+
+    it('throws a validation error due to duplicate values in prop "entities" in request body', async () => {
+      const body: CreateModelDto = {
+        ...ModelStubs.S1T1,
+        entities: [EntityStubs.S1T1.Librarian, EntityStubs.S1T1.Librarian],
+      };
+
+      const expectedValidationError = {
+        arrayUnique: "All entities's elements must be unique",
+      };
+      const response = await request(httpServer).post('/model').send(body);
+      expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(response.body.message[0].constraints).toEqual(
+        expectedValidationError,
+      );
+    });
+
+    it('fails uniqueness check because a model with the provided name already exists', async () => {
+      await dbConnection.collection('models').insertOne(ModelStubs.S1T1);
+
+      const body: CreateModelDto = ModelStubs.S1T1;
+      const response = await request(httpServer).post('/model').send(body);
+      expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(response.body).toEqual(ERRORS.MODEL_EXISTS);
+    });
   });
 
   describe('PATCH decks/:id/deltas', () => {
-    it('should successfully update model with changes specified as deltas', async () => {
+    it('should successfully update model (variant 1) with changes specified as deltas', async () => {
       const { insertedId: _id } = await dbConnection
         .collection('models')
         .insertOne(ModelStubs.S1T1);
@@ -165,6 +159,23 @@ describe('Model Service - E2E', () => {
 
       expect(response.status).toBe(HttpStatus.OK);
       expect(alteredModel).toMatchObject(ModelStubs.S3T1);
+    });
+
+    it('should successfully update model (variant 2) with changes specified as deltas', async () => {
+      const { insertedId: _id } = await dbConnection
+        .collection('models')
+        .insertOne(ModelStubs.S1T2);
+      const body: UpdateModelDto = DeltasStub.S1T2;
+      const response = await request(httpServer)
+        .patch(`/model/${_id}/deltas`)
+        .send(body);
+
+      const alteredModel = await dbConnection
+        .collection('models')
+        .findOne({ _id });
+
+      expect(response.status).toBe(HttpStatus.OK);
+      expect(alteredModel).toMatchObject(ModelStubs.S3T2);
     });
 
     // it('should throw a validation error when prop "count" is missing', async () => {

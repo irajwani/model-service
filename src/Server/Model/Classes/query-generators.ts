@@ -10,7 +10,6 @@ import { EditNameStrategy } from './Edit/name';
 import { EditEntityStrategy } from './Edit/entity';
 import { EditEntityNameStrategy } from './Edit/entity-name';
 import { EditEntityAttributesStrategy } from './Edit/entity-attributes';
-import { EditEntityAttributeStrategy } from './Edit/entity-attribute';
 import { EditEntityAttributePropertyStrategy } from './Edit/entity-attribute-property';
 import { EditAssociationStrategy } from './Edit/association';
 import { EditAssociationPropertyStrategy } from './Edit/association-property';
@@ -29,13 +28,10 @@ export const QueryGenerators = {
   },
   [Operations.EDIT]: {
     ['name']: EditNameStrategy,
-    ['entities.n']: EditEntityStrategy,
     ['entities.n.name']: EditEntityNameStrategy,
     ['entities.n.attributes']: EditEntityAttributesStrategy,
-    ['entities.n.attributes.n']: EditEntityAttributeStrategy,
     ['entities.n.attributes.n.sub-property']:
       EditEntityAttributePropertyStrategy,
-    ['associations.n']: EditAssociationStrategy,
     ['associations.n.sub-property']: EditAssociationPropertyStrategy,
   },
 };

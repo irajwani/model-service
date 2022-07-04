@@ -23,6 +23,19 @@ const DeltasStub: DeltasStub = {
       { op: Operations.DELETE, path: 'entities/1/attributes/1' },
     ],
   },
+  S1T2: {
+    deltas: [
+      {
+        op: Operations.DELETE,
+        path: 'entities/1',
+      },
+      {
+        op: Operations.EDIT,
+        path: 'entities/2/attributes/0/name',
+        value: 'main page',
+      },
+    ],
+  },
 };
 
 export default DeltasStub;

@@ -8,28 +8,29 @@ import { UpdateModelDto } from './Validation/update-model.dto';
 import {
   InternalServerException,
   InvalidAssociationException,
-  InvalidPathException,
   ModelExistsException,
   ModelNotFoundException,
   MongoCastToObjectIdFailedException,
   MongooseErrorCodes,
 } from '../../Common/Errors';
 import { ModelRepository } from './model.repository';
-import { IPatch } from './Types/patch';
-import { QueryGenerators } from './Classes/query-generators';
-import { UpdateQuery } from 'mongoose';
+import { Connection, UpdateQuery } from 'mongoose';
 import { IModel } from '../../Schemas/model.schema';
 import { IAssociation } from './Types/association';
 import { IEntity } from './Types/entity';
-import { BulkWriteResult } from 'mongodb';
 import { ERRORS } from '../../Common/Errors/messages';
-import BaseGenerator from './Classes/base-generator';
-import { IStrategy } from './Classes/Types/strategy';
 import ModelLogic from './model.logic';
+import { DatabaseService } from '../../Configurations/Database/database.service';
 
 @Injectable()
 export class ModelService {
-  constructor(private modelRepository: ModelRepository) {}
+  constructor(
+    private readonly modelRepository: ModelRepository,
+    private readonly databaseService: DatabaseService,
+  ) {}
+
+  private readonly dbConnection: Connection =
+    this.databaseService.getDbHandle();
 
   private validateAssociationsAndEntities(
     entities: IEntity[],
@@ -64,17 +65,16 @@ export class ModelService {
       const model = await this.modelRepository.findById(_id);
       if (!model) throw new ModelNotFoundException();
       return model;
-    } catch (e) {
-      if (e.reason && e.reason.message === ERRORS.CAST_TO_OBJECT_ID_FAILED)
+    } catch (err) {
+      if (err.reason && err.reason.message === ERRORS.CAST_TO_OBJECT_ID_FAILED)
         throw new MongoCastToObjectIdFailedException();
-      throw e;
+      throw err;
     }
   }
 
-  public async update(
-    _id: string,
-    { deltas }: UpdateModelDto,
-  ): Promise<BulkWriteResult> {
+  public async update(_id: string, { deltas }: UpdateModelDto): Promise<void> {
+    const session = await this.dbConnection.startSession();
+    session.startTransaction();
     try {
       const model = await this.findOne(_id);
       const updateSequence = ModelLogic.generateUpdateSequence(deltas, model);
@@ -85,9 +85,13 @@ export class ModelService {
           update,
         },
       }));
-      return this.modelRepository.bulkWrite(bulkUpdate, { ordered: true });
+      await this.modelRepository.bulkWrite(bulkUpdate, { ordered: true });
+      await session.commitTransaction();
     } catch (err) {
+      await session.abortTransaction();
       throw err;
+    } finally {
+      await session.endSession();
     }
   }
 }

@@ -86,5 +86,5 @@ export class MongoCastToObjectIdFailedException extends HttpException {
 }
 
 export enum MongooseErrorCodes {
-  UniquePropViolation = '11000',
+  UniquePropViolation = 11000,
 }

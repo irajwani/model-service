@@ -7,10 +7,14 @@ import {
   Param,
   HttpStatus,
   HttpCode,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { ModelService } from './model.service';
 import { CreateModelDto } from './Validation/create-model.dto';
 import { UpdateModelDto } from './Validation/update-model.dto';
+import { IUpdateModelResponse } from './Types/update-model-response';
+import { TResponse } from '../../Common/Types/response';
 
 @Controller('model')
 export class ModelController {
@@ -29,8 +33,14 @@ export class ModelController {
   }
 
   @Patch(':id/deltas')
-  @HttpCode(HttpStatus.OK)
-  update(@Param('id') id: string, @Body() body: UpdateModelDto) {
-    return this.modelService.update(id, body);
+  async update(
+    @Param('id') id: string,
+    @Body() body: UpdateModelDto,
+    @Res() response: Response,
+  ): Promise<TResponse<IUpdateModelResponse>> {
+    await this.modelService.update(id, body);
+    return response
+      .status(HttpStatus.OK)
+      .json({ message: `Successfully updated model with ID: ${id}` });
   }
 }

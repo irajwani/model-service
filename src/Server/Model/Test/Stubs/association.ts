@@ -18,6 +18,18 @@ const AssociationStubs: IAssociationStubs = {
       target: EntityStubs.S1T1.Bookshelf.name,
     },
   },
+  S1T2: {
+    worksFor: {
+      name: 'worksFor',
+      source: EntityStubs.S1T2.Person.name,
+      target: EntityStubs.S1T2.Company.name,
+    },
+    hasSite: {
+      name: 'hasSite',
+      source: EntityStubs.S1T2.Person.name,
+      target: EntityStubs.S1T2.Website.name,
+    },
+  },
   S3T1: {
     BookshelfToLibrarian: {
       name: 'arrangedBy',
