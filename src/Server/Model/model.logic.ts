@@ -3,13 +3,15 @@ import { IPatch } from './Types/patch';
 import { QueryGenerators } from './Classes/query-generators';
 import { InvalidPathException } from '../../Common/Errors';
 import BaseGenerator from './Classes/base-generator';
+import { IModel } from '../../Schemas/model.schema';
+import { UpdateQuery } from 'mongoose';
 
 export default class ModelLogic {
-  static generateUpdateSequence(deltas, model) {
+  public generateUpdateSequence(_id: string, deltas: IPatch[], model: IModel) {
     const updateSequence = [];
-    _.forEach(deltas, function ({ op, path, value }: IPatch) {
-      const abstractPath = ModelLogic.generateAbstractPath(path);
-      const field = ModelLogic.generateField(path);
+    _.forEach(deltas, ({ op, path, value }: IPatch) => {
+      const abstractPath = this.generateAbstractPath(path);
+      const field = this.generateField(path);
       const targetStrategy = QueryGenerators[op][abstractPath];
       if (!targetStrategy) throw new InvalidPathException();
       const { update } = new BaseGenerator(
@@ -17,19 +19,40 @@ export default class ModelLogic {
       );
       updateSequence.push(...update);
     });
-    return updateSequence;
+    const filter = { _id };
+    const bulkUpdate = updateSequence.map((update: UpdateQuery<IModel>) => ({
+      updateOne: {
+        filter,
+        update,
+      },
+    }));
+    return bulkUpdate;
   }
 
-  static generateAbstractPath(path: string): string {
+  generateAbstractPath(path: string): string {
     return _.join(
       _.split(path, '/').map((component: string, index: number) =>
-        index === 4 ? 'sub-property' : index % 2 !== 0 ? 'n' : component,
+        this.isSubProperty(component, index)
+          ? 'sub-property'
+          : index % 2 !== 0
+          ? 'n'
+          : component,
       ),
       '.',
     );
   }
 
-  static generateField(path: string): string {
+  private generateField(path: string): string {
     return _.join(_.split(path, '/'), '.');
+  }
+
+  private isSubProperty(component: string, index: number): boolean {
+    return (
+      index > 0 &&
+      (component === 'name' ||
+        component === 'type' ||
+        component === 'source' ||
+        component === 'target')
+    );
   }
 }

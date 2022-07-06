@@ -5,6 +5,7 @@ import { UpdateQuery } from 'mongoose';
 import { TValue } from '../Types/value';
 import { InvalidPathException } from '../../../../Common/Errors';
 import { ValidProperties } from '../Types/valid-resources';
+import { IAttribute } from '../../Types/attribute';
 
 export class EditEntityAttributePropertyStrategy implements IStrategy {
   field: string;
@@ -19,15 +20,22 @@ export class EditEntityAttributePropertyStrategy implements IStrategy {
   }
 
   public generateUpdateQuery(): UpdateQuery<IModel>[] {
-    const index = _.split(this.field, '.')[1];
-    const subIndex = _.split(this.field, '.')[3];
-    const attributeProperty = this.value as string;
+    const [, index, , subIndex, subProperty] = _.split(this.field, '.');
+    const attribute: IAttribute =
+      this.model.entities[index].attributes[subIndex];
     if (
-      !this.model.entities[index].attributes[subIndex] ||
-      (attributeProperty !== ValidProperties.name &&
-        attributeProperty !== ValidProperties.type)
+      !attribute ||
+      (subProperty !== ValidProperties.name &&
+        subProperty !== ValidProperties.type)
     )
       throw new InvalidPathException();
-    return [{ $set: { [this.field]: this.value } }];
+    attribute[subProperty] = this.value;
+    return [
+      {
+        $set: {
+          [`entities.${index}.attributes.${subIndex}`]: attribute,
+        },
+      },
+    ];
   }
 }

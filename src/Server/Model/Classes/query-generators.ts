@@ -32,6 +32,7 @@ export const QueryGenerators = {
     ['entities.n.attributes']: EditEntityAttributesStrategy,
     ['entities.n.attributes.n.sub-property']:
       EditEntityAttributePropertyStrategy,
+    ['associations.n']: EditAssociationStrategy,
     ['associations.n.sub-property']: EditAssociationPropertyStrategy,
   },
 };

@@ -22,7 +22,7 @@ export class EditAssociationStrategy implements IStrategy {
   }
 
   public generateUpdateQuery(): UpdateQuery<IModel>[] {
-    const index = _.split(this.field, '.')[1];
+    const [, index] = _.split(this.field, '.');
     if (!this.model.associations[index]) throw new InvalidPathException();
     const { source, target } = this.value as IAssociation;
     if (

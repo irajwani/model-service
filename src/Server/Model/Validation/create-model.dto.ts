@@ -42,7 +42,7 @@ export class CreateModelDto {
   @ApiProperty({
     name: 'name',
     description: 'Model name',
-    example: 'Library',
+    example: 'Evil Corp.',
     type: String,
     minLength: MODEL_NAME_MIN_LENGTH,
     maxLength: MODEL_NAME_MAX_LENGTH,
@@ -57,7 +57,7 @@ export class CreateModelDto {
     name: 'entities',
     description: 'Entities within model',
     type: Array,
-    example: Object.values(EntitiesExample.S1T1),
+    example: Object.values(EntitiesExample.S1T2),
   })
   @IsDefined()
   @IsArray()
@@ -71,7 +71,7 @@ export class CreateModelDto {
     name: 'associations',
     description: 'Associations between entities of model',
     type: Array,
-    example: Object.values(AssociationsExample.S1T1),
+    example: Object.values(AssociationsExample.S1T2),
   })
   @IsOptional()
   @IsArray()

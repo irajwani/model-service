@@ -21,9 +21,7 @@ export class EditAssociationPropertyStrategy implements IStrategy {
 
   public generateUpdateQuery(): UpdateQuery<IModel>[] {
     const update: UpdateQuery<IModel>[] = [];
-    const fieldComponents = _.split(this.field, '.');
-    const index = fieldComponents[1];
-    const subProperty = fieldComponents[2];
+    const [, index, subProperty] = _.split(this.field, '.');
     const { source, target } = this.model.associations[index];
     if (
       subProperty === ValidProperties.source ||

@@ -144,7 +144,7 @@ describe('Model Service - E2E', () => {
   });
 
   describe('PATCH decks/:id/deltas', () => {
-    it('should successfully update model (variant 1) with changes specified as deltas', async () => {
+    it.skip('should successfully update model (variant 1) with changes specified as deltas', async () => {
       const { insertedId: _id } = await dbConnection
         .collection('models')
         .insertOne(ModelStubs.S1T1);

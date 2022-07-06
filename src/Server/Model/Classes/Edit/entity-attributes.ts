@@ -4,6 +4,7 @@ import { IModel } from '../../../../Schemas/model.schema';
 import { UpdateQuery } from 'mongoose';
 import { TValue } from '../Types/value';
 import { InvalidPathException } from '../../../../Common/Errors';
+import { IAttribute } from '../../Types/attribute';
 
 export class EditEntityAttributesStrategy implements IStrategy {
   field: string;
@@ -21,6 +22,7 @@ export class EditEntityAttributesStrategy implements IStrategy {
     const index = _.split(this.field, '.')[1];
     if (!this.model.entities[index].attributes)
       throw new InvalidPathException();
-    return [{ $set: { [this.field]: this.value } }];
+    const attributes: IAttribute[] = this.value as IAttribute[];
+    return [{ $set: { [this.field]: attributes } }];
   }
 }

@@ -77,14 +77,11 @@ export class ModelService {
     session.startTransaction();
     try {
       const model = await this.findOne(_id);
-      const updateSequence = ModelLogic.generateUpdateSequence(deltas, model);
-      const filter = { _id };
-      const bulkUpdate = updateSequence.map((update: UpdateQuery<IModel>) => ({
-        updateOne: {
-          filter,
-          update,
-        },
-      }));
+      const bulkUpdate = new ModelLogic().generateUpdateSequence(
+        _id,
+        deltas,
+        model,
+      );
       await this.modelRepository.bulkWrite(bulkUpdate, { ordered: true });
       await session.commitTransaction();
     } catch (err) {

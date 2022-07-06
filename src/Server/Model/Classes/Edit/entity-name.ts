@@ -20,7 +20,7 @@ export class EditEntityNameStrategy implements IStrategy {
   }
 
   public generateUpdateQuery(): UpdateQuery<IModel>[] {
-    const index = _.split(this.field, '.')[1];
+    const [, index] = _.split(this.field, '.');
     const update: UpdateQuery<IModel>[] = [];
     const name = this.value as string;
     if (!this.model.entities[index]) throw new InvalidPathException();
@@ -29,9 +29,9 @@ export class EditEntityNameStrategy implements IStrategy {
     if (name !== entityName) {
       const associationIndices = [];
       _.forEach(this.model.associations, (association: IAssociation, index) => {
-        if (association.source === name)
+        if (association.source === entityName)
           associationIndices.push({ type: 'source', index });
-        if (association.target === name)
+        if (association.target === entityName)
           associationIndices.push({ type: 'target', index });
       });
       _.forEach(associationIndices, ({ type, index }) => {
